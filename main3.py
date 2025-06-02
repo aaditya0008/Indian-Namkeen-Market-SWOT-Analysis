@@ -387,7 +387,185 @@ def get_restaurant_presence_table():
     return Response(content=img_bytes, media_type="image/png")
 
 
+from fastapi import FastAPI, Response
+from fastapi.responses import StreamingResponse
+from fastapi.responses import FileResponse
+
+from services.basket_composition_service import get_basket_composition_chart
+from services.Influence_Attribution import generate_mentions_by_platform_image
+from services.Trust_Analysis import generate_trust_analysis_plot
+from services.Search_Behaviour_Evolution import generate_search_behavior_evolution_chart
+from services.Community_Engagement import community_engagement_chart
+from services.User_Segmentation_Proxy import user_segmentation_proxy
+from services.Post_Purchase_Dissonance import PostPurchaseDissonance
+from services.Subscription_Intrest_Level import generate_subscription_pie_chart
+from services.Mobile_vs_Desktop_interaction import generate_mobile_desktop_bar_chart
+from services.Keyword_performancce import generate_high_intent_keyword_trend_chart
+from services.Brand_switching import generate_switch_trigger_chart
+from services.Platform_role import get_platform_funnel_kpi_chart
+from services.Purchase_frequency import generate_purchase_frequency_chart
+from services.Return_refund_issue import generate_issue_type_chart
+from services.Generation_wise_usage import generate_cross_generation_chart
+from services.health_awareness_spectrum import get_health_awareness_chart
+from services.Recipe_Integration import get_recipe_usage_figure_bytes
+from services.Homemade_vs_local import create_chart_image
+from services.Impulse_purchase import generate_impulse_kpi_chart
+from services.Unboxing_review import get_chart_response
+from services.Digital_Payment import generate_payment_issues_chart
+from services.Gift_card_mention import create_user_type_pie_chart 
+from services.food_hack import generate_hacktype_bar_chart
+from services.cultural_discussion import generate_contextual_indicators_chart
+from services.Variety_information import generate_information_overload_chart
+from services.online_influence import load_and_process_data, plot_kpi_bar_chart
+from services.Price_increase_reactions import load_reactions, create_pie_chart
+
+ppd = PostPurchaseDissonance()
+
+
+@app.get("/kpi/basket-composition")
+def basket_composition_kpi():
+    img_bytes = get_basket_composition_chart()
+    if not img_bytes:
+        return {"message": "No data available to plot"}
+    return Response(content=img_bytes, media_type="image/png")
+
+@app.get("/influence-platform-mentions")
+def influence_platform_mentions():
+    img_buf = generate_mentions_by_platform_image()
+    return StreamingResponse(img_buf, media_type="image/png")
+
+@app.get("/search-behavior-evolution")
+def get_search_behavior_evolution():
+    img_bytes = generate_search_behavior_evolution_chart()
+    return Response(content=img_bytes, media_type="image/png")
+
+CSV_FILE_PATH = "KPI_Data/Trust_Analysis.csv"
+@app.get("/trust-analysis", response_class=Response)
+async def trust_analysis():
+    img_bytes = generate_trust_analysis_plot(CSV_FILE_PATH)
+    return Response(content=img_bytes, media_type="image/png")
+
+@app.get("/post_purchase_dissonance_chart")
+def get_dissonance_chart():
+    img = ppd.generate_dissonance_chart()
+    return Response(content=img, media_type="image/png")
+
+@app.get("/kpi/community-engagement")
+def show_chart():
+    return community_engagement_chart()
+
+@app.get("/kpi/user-segmentation", response_class=Response)
+def segmentation_chart():
+    return user_segmentation_proxy()
+
+@app.get("/subscription-interest-level")
+def subscription_interest_pie_chart():
+    img_bytes = generate_subscription_pie_chart()
+    return Response(content=img_bytes, media_type="image/png")
+
+@app.get("/kpi/mobile-desktop-interaction")
+def mobile_desktop_interaction():
+    img_buf = generate_mobile_desktop_bar_chart()
+    return StreamingResponse(img_buf, media_type="image/png")
+
+@app.get("/high-intent-keyword-trends")
+def get_high_intent_keyword_trends():
+    csv_path = 'KPI_Data/Keyword_Performance.csv'
+    image_bytes = generate_high_intent_keyword_trend_chart(csv_path)
+    return Response(content=image_bytes, media_type="image/png")
+
+@app.get("/kpi/Brand_switching_triggers")
+def get_switch_trigger_chart():
+    chart_path = generate_switch_trigger_chart()
+    return FileResponse(chart_path, media_type="image/png")
+
+@app.get("/kpi/platform-funnel")
+def platform_funnel_kpi_chart():
+    return get_platform_funnel_kpi_chart()
+
+@app.get("/kpi/purchase-frequency")
+def get_purchase_frequency_image():
+    generate_purchase_frequency_chart()
+    return FileResponse("purchase_frequency_mentions.png", media_type="image/png")
+
+CSV_PATH = "KPI_Data/Return_refund_issues.csv"
+@app.get("/issue_type_chart")
+def issue_type_chart():
+    img_bytes = generate_issue_type_chart(CSV_PATH)
+    return Response(content=img_bytes, media_type="image/png")
+
+CSV_FILE = "KPI_data/Generation_wise_Consumption.csv"  # Adjust path as needed
+@app.get("/kpi/cross-generation-usage")
+def cross_generation_usage_kpi():
+    img = generate_cross_generation_chart(CSV_FILE)
+    return Response(content=img.read(), media_type="image/png")
+
+@app.get("/kpi/health-awareness-spectrum")
+def health_awareness_endpoint():
+    return get_health_awareness_chart()
+
+@app.get("/kpi/recipe-usage")
+def recipe_usage_png():
+    csv_path = "KPI_Data/Recipe_Integration_Mentions.csv"
+    img_bytes = get_recipe_usage_figure_bytes(csv_path)
+    return Response(content=img_bytes, media_type="image/png")
+
+@app.get("/Homemade_vs_local")
+def get_chart():
+    img_bytes = create_chart_image()
+    return Response(content=img_bytes, media_type="image/png")
+
+@app.get("/impulse_kpi")
+def impulse_kpi():
+    img_bytes = generate_impulse_kpi_chart()
+    return Response(content=img_bytes, media_type="image/png")
+
+@app.get("/Unboxing_review_sentiment")
+async def chart_png():
+    return get_chart_response()
+
+@app.get("/payment-issues")
+def payment_issues_chart():
+    png_bytes = generate_payment_issues_chart()
+    return Response(content=png_bytes, media_type="image/png")
+
+@app.get("/kpi/user-types")
+def user_types_pie_chart():
+    return create_user_type_pie_chart()
+
+@app.get("/Foodhack type")
+def get_hacktype_chart():
+    img_buf = generate_hacktype_bar_chart()
+    return Response(content=img_buf.read(), media_type="image/png")
+
+@app.get("/kpi/contextual-indicators")
+async def get_contextual_indicators_chart():
+    return generate_contextual_indicators_chart()
+
+@app.get("/kpi/information-overload")
+def get_information_overload_chart():
+    image_path = generate_information_overload_chart()
+    return FileResponse(image_path, media_type="image/png")
+
+CSV_PATH = "KPI_Data/online_influence.csv"  # Adjust path as needed
+@app.get("/online_influence")
+def get_kpi_bar_chart():
+    summary_df = load_and_process_data(CSV_PATH)
+    img_buf = plot_kpi_bar_chart(summary_df)
+    return Response(content=img_buf.read(), media_type="image/png")
+
+CSV_PATH = "KPI_Data/Price_increase_reactions.csv" 
+@app.get("/price-increase-sentiment")
+def price_increase_sentiment_pie():
+    labels, sizes = load_reactions(CSV_PATH)
+    img_buf = create_pie_chart(labels, sizes)
+    return Response(content=img_buf.read(), media_type="image/png")
+
+
+
 
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
+# To run the FastAPI application, use the command: uvicorn main3:app --reload
