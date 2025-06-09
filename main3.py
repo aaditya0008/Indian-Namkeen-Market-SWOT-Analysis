@@ -803,6 +803,32 @@ def brand_resilience_score():
         return {"message": "No data available to plot"}
     return Response(content=img_bytes, media_type="image/png")
 
+#D_KPI
+
+from fastapi import FastAPI
+from PhysicalKPI import (
+    KPI1, KPI2, KPI3, KPI4, KPI5, KPI6, KPI7, KPI8,
+    KPI9, KPI10, KPI11, KPI12, KPI13, KPI14, KPI15
+)
+
+# ✅ Register all 15 KPI Routers
+app.include_router(KPI1.router, prefix="/KPI1", tags=["D_KPI 1"])
+app.include_router(KPI2.router, prefix="/KPI2", tags=["D_KPI 2"])
+app.include_router(KPI3.router, prefix="/KPI3", tags=["D_KPI 3"])
+app.include_router(KPI4.router, prefix="/KPI4", tags=["D_KPI 4"])
+app.include_router(KPI5.router, prefix="/KPI5", tags=["D_KPI 5"])
+app.include_router(KPI6.router, prefix="/KPI6", tags=["D_KPI 6"])
+app.include_router(KPI7.router, prefix="/KPI7", tags=["D_KPI 7"])
+app.include_router(KPI8.router, prefix="/KPI8", tags=["D_KPI 8"])
+app.include_router(KPI9.router, prefix="/KPI9", tags=["D_KPI 9"])
+app.include_router(KPI10.router, prefix="/KPI10", tags=["D_KPI 10"])
+app.include_router(KPI11.router, prefix="/KPI11", tags=["D_KPI 11"])
+app.include_router(KPI12.router, prefix="/KPI12", tags=["D_KPI 12"])
+app.include_router(KPI13.router, prefix="/KPI13", tags=["D_KPI 13"])
+app.include_router(KPI14.router, prefix="/KPI14", tags=["D_KPI 14"])
+app.include_router(KPI15.router, prefix="/KPI15", tags=["D_KPI 15"])
+
+
 
 if __name__ == "__main__":
     import uvicorn
