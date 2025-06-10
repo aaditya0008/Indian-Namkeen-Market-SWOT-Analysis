@@ -386,7 +386,7 @@ def get_restaurant_presence_table():
     img_bytes = generate_restaurant_presence_table()
     return Response(content=img_bytes, media_type="image/png")
 
-
+# Advanced Consumer Behavior & Journey Insights (OSINT) 
 from fastapi import FastAPI, Response
 from fastapi.responses import StreamingResponse
 from fastapi.responses import FileResponse
@@ -422,14 +422,14 @@ from services.Price_increase_reactions import load_reactions, create_pie_chart
 ppd = PostPurchaseDissonance()
 
 
-@app.get("/kpi/basket-composition")
+@app.get("I-10_basket-composition-clues")
 def basket_composition_kpi():
     img_bytes = get_basket_composition_chart()
     if not img_bytes:
         return {"message": "No data available to plot"}
     return Response(content=img_bytes, media_type="image/png")
 
-@app.get("/influence-platform-mentions")
+@app.get("/I-11_Influence-Attribution-Guesses")
 def influence_platform_mentions():
     img_buf = generate_mentions_by_platform_image()
     return StreamingResponse(img_buf, media_type="image/png")
