@@ -421,7 +421,6 @@ from services.Price_increase_reactions import load_reactions, create_pie_chart
 
 ppd = PostPurchaseDissonance()
 
-
 @app.get("I-10_basket-composition-clues")
 def basket_composition_kpi():
     img_bytes = get_basket_composition_chart()
@@ -529,7 +528,7 @@ def payment_issues_chart():
     png_bytes = generate_payment_issues_chart()
     return Response(content=png_bytes, media_type="image/png")
 
-@app.get("/kpi/user-types")
+@app.get("I-22_Gift_Card/Voucher_Mentions")
 def user_types_pie_chart():
     return create_user_type_pie_chart()
 
@@ -538,24 +537,24 @@ def get_hacktype_chart():
     img_buf = generate_hacktype_bar_chart()
     return Response(content=img_buf.read(), media_type="image/png")
 
-@app.get("/kpi/contextual-indicators")
+@app.get("I-9_Purchase_Frequency_Indicators")
 async def get_contextual_indicators_chart():
     return generate_contextual_indicators_chart()
 
-@app.get("/kpi/information-overload")
+@app.get("I-25_Information_Overload/Simplicity_Desire")
 def get_information_overload_chart():
     image_path = generate_information_overload_chart()
     return FileResponse(image_path, media_type="image/png")
 
 CSV_PATH = "KPI_Data/online_influence.csv"  # Adjust path as needed
-@app.get("/online_influence")
+@app.get("I-29_Online-Community-Influence")
 def get_kpi_bar_chart():
     summary_df = load_and_process_data(CSV_PATH)
     img_buf = plot_kpi_bar_chart(summary_df)
     return Response(content=img_buf.read(), media_type="image/png")
 
 CSV_PATH = "KPI_Data/Price_increase_reactions.csv" 
-@app.get("/price-increase-sentiment")
+@app.get("I-30_Response-to-Price-Increase-Justificationt")
 def price_increase_sentiment_pie():
     labels, sizes = load_reactions(CSV_PATH)
     img_buf = create_pie_chart(labels, sizes)
