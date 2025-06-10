@@ -429,102 +429,102 @@ def basket_composition_kpi():
         return {"message": "No data available to plot"}
     return Response(content=img_bytes, media_type="image/png")
 
-@app.get("/I-11_Influence-Attribution-Guesses")
+@app.get("I-11_Influence-Attribution-Guesses")
 def influence_platform_mentions():
     img_buf = generate_mentions_by_platform_image()
     return StreamingResponse(img_buf, media_type="image/png")
 
-@app.get("/search-behavior-evolution")
+@app.get("I-28_search-behavior-evolution")
 def get_search_behavior_evolution():
     img_bytes = generate_search_behavior_evolution_chart()
     return Response(content=img_bytes, media_type="image/png")
 
 CSV_FILE_PATH = "KPI_Data/Trust_Analysis.csv"
-@app.get("/trust-analysis", response_class=Response)
+@app.get("I-27_Trust-Indicator-Analysis", response_class=Response)
 async def trust_analysis():
     img_bytes = generate_trust_analysis_plot(CSV_FILE_PATH)
     return Response(content=img_bytes, media_type="image/png")
 
-@app.get("/post_purchase_dissonance_chart")
+@app.get("I-26_Post-Purchase-Dissonance-Signals")
 def get_dissonance_chart():
     img = ppd.generate_dissonance_chart()
     return Response(content=img, media_type="image/png")
 
-@app.get("/kpi/community-engagement")
+@app.get("I-8_Community-Engagement-Level")
 def show_chart():
     return community_engagement_chart()
 
-@app.get("/kpi/user-segmentation", response_class=Response)
+@app.get("I-7_User-Segmentation-Proxy", response_class=Response)
 def segmentation_chart():
     return user_segmentation_proxy()
 
-@app.get("/subscription-interest-level")
+@app.get("I-13_Subscription_Interest_Signals")
 def subscription_interest_pie_chart():
     img_bytes = generate_subscription_pie_chart()
     return Response(content=img_bytes, media_type="image/png")
 
-@app.get("/kpi/mobile-desktop-interaction")
+@app.get("I-6_mobile-desktop-interaction")
 def mobile_desktop_interaction():
     img_buf = generate_mobile_desktop_bar_chart()
     return StreamingResponse(img_buf, media_type="image/png")
 
-@app.get("/high-intent-keyword-trends")
+@app.get("I-4_high-intent-keyword-trends")
 def get_high_intent_keyword_trends():
     csv_path = 'KPI_Data/Keyword_Performance.csv'
     image_bytes = generate_high_intent_keyword_trend_chart(csv_path)
     return Response(content=image_bytes, media_type="image/png")
 
-@app.get("/kpi/Brand_switching_triggers")
+@app.get("I-3_Brand_switching_triggers")
 def get_switch_trigger_chart():
     chart_path = generate_switch_trigger_chart()
     return FileResponse(chart_path, media_type="image/png")
 
-@app.get("/kpi/platform-funnel")
+@app.get("I-2_Platform_Role_in_Purchase_Funnel ")
 def platform_funnel_kpi_chart():
     return get_platform_funnel_kpi_chart()
 
-@app.get("/kpi/purchase-frequency")
+@app.get("I-9_Purchase-Frequency-Indicators")
 def get_purchase_frequency_image():
     generate_purchase_frequency_chart()
     return FileResponse("purchase_frequency_mentions.png", media_type="image/png")
 
 CSV_PATH = "KPI_Data/Return_refund_issues.csv"
-@app.get("/issue_type_chart")
+@app.get("I-12_Return_refund_issues")
 def issue_type_chart():
     img_bytes = generate_issue_type_chart(CSV_PATH)
     return Response(content=img_bytes, media_type="image/png")
 
 CSV_FILE = "KPI_data/Generation_wise_Consumption.csv"  # Adjust path as needed
-@app.get("/kpi/cross-generation-usage")
+@app.get("I-15_cross-generation-usage")
 def cross_generation_usage_kpi():
     img = generate_cross_generation_chart(CSV_FILE)
     return Response(content=img.read(), media_type="image/png")
 
-@app.get("/kpi/health-awareness-spectrum")
+@app.get("I-16_Health_Consciousness_Spectrum")
 def health_awareness_endpoint():
     return get_health_awareness_chart()
 
-@app.get("/kpi/recipe-usage")
+@app.get("I-17_Recipe_Usage/Integration_Mentions")
 def recipe_usage_png():
     csv_path = "KPI_Data/Recipe_Integration_Mentions.csv"
     img_bytes = get_recipe_usage_figure_bytes(csv_path)
     return Response(content=img_bytes, media_type="image/png")
 
-@app.get("/Homemade_vs_local")
+@app.get("I-18_Comparison-with-Homemade/Local-Alternatives")
 def get_chart():
     img_bytes = create_chart_image()
     return Response(content=img_bytes, media_type="image/png")
 
-@app.get("/impulse_kpi")
+@app.get("I-19_Impulse_Purchase_Indicators")
 def impulse_kpi():
     img_bytes = generate_impulse_kpi_chart()
     return Response(content=img_bytes, media_type="image/png")
 
-@app.get("/Unboxing_review_sentiment")
+@app.get("I-20_Unboxing_Experience_Mentions")
 async def chart_png():
     return get_chart_response()
 
-@app.get("/payment-issues")
+@app.get("I-21_Digital_Payment_Preference/Issues")
 def payment_issues_chart():
     png_bytes = generate_payment_issues_chart()
     return Response(content=png_bytes, media_type="image/png")
@@ -533,7 +533,7 @@ def payment_issues_chart():
 def user_types_pie_chart():
     return create_user_type_pie_chart()
 
-@app.get("/Foodhack type")
+@app.get("I-23_Food_Hack_Mentions")
 def get_hacktype_chart():
     img_buf = generate_hacktype_bar_chart()
     return Response(content=img_buf.read(), media_type="image/png")
