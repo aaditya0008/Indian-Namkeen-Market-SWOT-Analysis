@@ -20,63 +20,63 @@ from SWOTkpi.Source import (
 
 app = FastAPI(title="SWOT Specific Indicators APIs")
 
-@app.get("/kpi/review-theme-analysis")
-def analyze_review_themes() -> Dict[str, Any]:
-    return analyze_review_themes_logic()
-
-@app.get("/Lower_Engagement_Rate/")
-def analyze_social_media_metrics() -> Dict[str, Any]:
-    return analyze_social_media_metrics_logic()
-
-@app.get("/website_usability_issues/")
-def analyze_website_issues() -> Dict[str, Any]:
-    return analyze_website_issues_logic()
-
-@app.get("/analyze_response_rates/")
-async def analyze_response_rates() -> Dict[str, Any]:
-    return await analyze_response_rates_logic()
-
-@app.get("/news_sentiment_spikes/")
-async def news_sentiment_spikes() -> Dict[str, Any]:
-    return await news_sentiment_spikes_logic()
-
-@app.get("/search_volume_rank/")
+@app.get("/E1_Strength/High_Brand_Search_Volume_Rank/")
 async def search_volume_rank() -> Dict[str, Any]:
     return await search_volume_rank_logic()
 
-@app.get("/analyze_sentiment_score/")
+@app.get("/E2_Strength/Positive_Overall_Sentiment_Score/")
 async def analyze_sentiment_score() -> Dict[str, Any]:
     return await analyze_sentiment_score_logic()
 
-@app.get("/product_range_visibility/")
+@app.get("/E3_Strength/Wide_Product_Range_Visibility/")
 async def product_range_visibility() -> Dict[str, Any]:
     return await product_range_visibility_logic()
 
-@app.get("/analyze_ecommerce_presence/")
+@app.get("/E4_Strength/Strong_Ecommerce_Presence/Ratings/")
 async def analyze_ecommerce_presence() -> Dict[str, Any]:
     return await analyze_ecommerce_presence_logic()
 
-@app.get("/high_review_volume/")
+@app.get("/E5_Strength/High_review_volume/")
 async def high_review_volume() -> Dict[str, Any]:
     return await high_review_volume_logic()
 
-@app.get("/analyze_high_growth_adjacent_categories/")
+@app.get("/E6_Weakness/Key_Negative_Review_Themes_Frequency")
+def analyze_review_themes() -> Dict[str, Any]:
+    return analyze_review_themes_logic()
+
+@app.get("/E7_Weakness/Lower_Engagement_Rate_vs_Select_Competitors/")
+def analyze_social_media_metrics() -> Dict[str, Any]:
+    return analyze_social_media_metrics_logic()
+
+@app.get("/E8_Weakness/Identified_Website_usability_issues/")
+def analyze_website_issues() -> Dict[str, Any]:
+    return analyze_website_issues_logic()
+
+@app.get("/E9_Weakness/Gaps_in_Online_Customer_Service_Response/")
+async def analyze_response_rates() -> Dict[str, Any]:
+    return await analyze_response_rates_logic()
+
+@app.get("/E10_Weakness/Negative_News_Sentiment_Spikes/")
+async def news_sentiment_spikes() -> Dict[str, Any]:
+    return await news_sentiment_spikes_logic()
+
+@app.get("/E11_Opportunities/High_Growth_Rate_In_Adjacent_Categories/")
 async def analyze_high_growth_adjacent_categories() -> Dict[str, Any]:
     return await analyze_high_growth_adjacent_categories_logic()
 
-@app.get("/analyze_trend_alignment/")
+@app.get("/E12_Opportunities/Rising_Trend_Alignment/")
 async def analyze_trend_alignment() -> Dict[str, Any]:
     return await analyze_trend_alignment_logic()
 
-@app.get("/analyze_unmet_needs/")
+@app.get("/E13_Opportunities/Unmet_Needs_Identified_In_Reviews/")
 async def analyze_unmet_needs() -> Dict[str, Any]:
     return await analyze_unmet_needs_logic()
 
-@app.get("/analyze_competitor_weaknesses/")
+@app.get("/E14_Opportunities/Competitor_Weaknesses_Identified/")
 async def analyze_competitor_weaknesses() -> Dict[str, Any]:
     return await analyze_competitor_weaknesses_logic()
 
-@app.get("/geographic_search_opportunity/")
+@app.get("/E15_Opportunities/Untapped_Geographic_Search_Interest/")
 def geographic_search_opportunity() -> Dict[str, Any]:
     return  geographic_search_opportunity_logic()
 
@@ -386,7 +386,7 @@ def get_restaurant_presence_table():
     img_bytes = generate_restaurant_presence_table()
     return Response(content=img_bytes, media_type="image/png")
 
-
+# Advanced Consumer Behavior & Journey Insights (OSINT) 
 from fastapi import FastAPI, Response
 from fastapi.responses import StreamingResponse
 from fastapi.responses import FileResponse
@@ -421,141 +421,140 @@ from services.Price_increase_reactions import load_reactions, create_pie_chart
 
 ppd = PostPurchaseDissonance()
 
-
-@app.get("/kpi/basket-composition")
+@app.get("I-10_basket-composition-clues")
 def basket_composition_kpi():
     img_bytes = get_basket_composition_chart()
     if not img_bytes:
         return {"message": "No data available to plot"}
     return Response(content=img_bytes, media_type="image/png")
 
-@app.get("/influence-platform-mentions")
+@app.get("I-11_Influence-Attribution-Guesses")
 def influence_platform_mentions():
     img_buf = generate_mentions_by_platform_image()
     return StreamingResponse(img_buf, media_type="image/png")
 
-@app.get("/search-behavior-evolution")
+@app.get("I-28_search-behavior-evolution")
 def get_search_behavior_evolution():
     img_bytes = generate_search_behavior_evolution_chart()
     return Response(content=img_bytes, media_type="image/png")
 
 CSV_FILE_PATH = "KPI_Data/Trust_Analysis.csv"
-@app.get("/trust-analysis", response_class=Response)
+@app.get("I-27_Trust-Indicator-Analysis", response_class=Response)
 async def trust_analysis():
     img_bytes = generate_trust_analysis_plot(CSV_FILE_PATH)
     return Response(content=img_bytes, media_type="image/png")
 
-@app.get("/post_purchase_dissonance_chart")
+@app.get("I-26_Post-Purchase-Dissonance-Signals")
 def get_dissonance_chart():
     img = ppd.generate_dissonance_chart()
     return Response(content=img, media_type="image/png")
 
-@app.get("/kpi/community-engagement")
+@app.get("I-8_Community-Engagement-Level")
 def show_chart():
     return community_engagement_chart()
 
-@app.get("/kpi/user-segmentation", response_class=Response)
+@app.get("I-7_User-Segmentation-Proxy", response_class=Response)
 def segmentation_chart():
     return user_segmentation_proxy()
 
-@app.get("/subscription-interest-level")
+@app.get("I-13_Subscription_Interest_Signals")
 def subscription_interest_pie_chart():
     img_bytes = generate_subscription_pie_chart()
     return Response(content=img_bytes, media_type="image/png")
 
-@app.get("/kpi/mobile-desktop-interaction")
+@app.get("I-6_mobile-desktop-interaction")
 def mobile_desktop_interaction():
     img_buf = generate_mobile_desktop_bar_chart()
     return StreamingResponse(img_buf, media_type="image/png")
 
-@app.get("/high-intent-keyword-trends")
+@app.get("I-4_high-intent-keyword-trends")
 def get_high_intent_keyword_trends():
     csv_path = 'KPI_Data/Keyword_Performance.csv'
     image_bytes = generate_high_intent_keyword_trend_chart(csv_path)
     return Response(content=image_bytes, media_type="image/png")
 
-@app.get("/kpi/Brand_switching_triggers")
+@app.get("I-3_Brand_switching_triggers")
 def get_switch_trigger_chart():
     chart_path = generate_switch_trigger_chart()
     return FileResponse(chart_path, media_type="image/png")
 
-@app.get("/kpi/platform-funnel")
+@app.get("I-2_Platform_Role_in_Purchase_Funnel ")
 def platform_funnel_kpi_chart():
     return get_platform_funnel_kpi_chart()
 
-@app.get("/kpi/purchase-frequency")
+@app.get("I-9_Purchase-Frequency-Indicators")
 def get_purchase_frequency_image():
     generate_purchase_frequency_chart()
     return FileResponse("purchase_frequency_mentions.png", media_type="image/png")
 
 CSV_PATH = "KPI_Data/Return_refund_issues.csv"
-@app.get("/issue_type_chart")
+@app.get("I-12_Return_refund_issues")
 def issue_type_chart():
     img_bytes = generate_issue_type_chart(CSV_PATH)
     return Response(content=img_bytes, media_type="image/png")
 
 CSV_FILE = "KPI_data/Generation_wise_Consumption.csv"  # Adjust path as needed
-@app.get("/kpi/cross-generation-usage")
+@app.get("I-15_cross-generation-usage")
 def cross_generation_usage_kpi():
     img = generate_cross_generation_chart(CSV_FILE)
     return Response(content=img.read(), media_type="image/png")
 
-@app.get("/kpi/health-awareness-spectrum")
+@app.get("I-16_Health_Consciousness_Spectrum")
 def health_awareness_endpoint():
     return get_health_awareness_chart()
 
-@app.get("/kpi/recipe-usage")
+@app.get("I-17_Recipe_Usage/Integration_Mentions")
 def recipe_usage_png():
     csv_path = "KPI_Data/Recipe_Integration_Mentions.csv"
     img_bytes = get_recipe_usage_figure_bytes(csv_path)
     return Response(content=img_bytes, media_type="image/png")
 
-@app.get("/Homemade_vs_local")
+@app.get("I-18_Comparison-with-Homemade/Local-Alternatives")
 def get_chart():
     img_bytes = create_chart_image()
     return Response(content=img_bytes, media_type="image/png")
 
-@app.get("/impulse_kpi")
+@app.get("I-19_Impulse_Purchase_Indicators")
 def impulse_kpi():
     img_bytes = generate_impulse_kpi_chart()
     return Response(content=img_bytes, media_type="image/png")
 
-@app.get("/Unboxing_review_sentiment")
+@app.get("I-20_Unboxing_Experience_Mentions")
 async def chart_png():
     return get_chart_response()
 
-@app.get("/payment-issues")
+@app.get("I-21_Digital_Payment_Preference/Issues")
 def payment_issues_chart():
     png_bytes = generate_payment_issues_chart()
     return Response(content=png_bytes, media_type="image/png")
 
-@app.get("/kpi/user-types")
+@app.get("I-22_Gift_Card/Voucher_Mentions")
 def user_types_pie_chart():
     return create_user_type_pie_chart()
 
-@app.get("/Foodhack type")
+@app.get("I-23_Food_Hack_Mentions")
 def get_hacktype_chart():
     img_buf = generate_hacktype_bar_chart()
     return Response(content=img_buf.read(), media_type="image/png")
 
-@app.get("/kpi/contextual-indicators")
+@app.get("I-9_Purchase_Frequency_Indicators")
 async def get_contextual_indicators_chart():
     return generate_contextual_indicators_chart()
 
-@app.get("/kpi/information-overload")
+@app.get("I-25_Information_Overload/Simplicity_Desire")
 def get_information_overload_chart():
     image_path = generate_information_overload_chart()
     return FileResponse(image_path, media_type="image/png")
 
 CSV_PATH = "KPI_Data/online_influence.csv"  # Adjust path as needed
-@app.get("/online_influence")
+@app.get("I-29_Online-Community-Influence")
 def get_kpi_bar_chart():
     summary_df = load_and_process_data(CSV_PATH)
     img_buf = plot_kpi_bar_chart(summary_df)
     return Response(content=img_buf.read(), media_type="image/png")
 
 CSV_PATH = "KPI_Data/Price_increase_reactions.csv" 
-@app.get("/price-increase-sentiment")
+@app.get("I-30_Response-to-Price-Increase-Justificationt")
 def price_increase_sentiment_pie():
     labels, sizes = load_reactions(CSV_PATH)
     img_buf = create_pie_chart(labels, sizes)
