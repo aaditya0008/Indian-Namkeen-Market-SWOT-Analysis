@@ -32,7 +32,7 @@ def niche_targeting_plot():
 
     return buf.getvalue()
 
-if __name__ == "__main__":
+if __name__ == "_main_":
     img_bytes = niche_targeting_plot()
     with open("niche_targeting_plot.png", "wb") as f:
         f.write(img_bytes)

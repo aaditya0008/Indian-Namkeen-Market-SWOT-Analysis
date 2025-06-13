@@ -1,34 +1,26 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import os
+from io import BytesIO
 
-# Step 1: Read the file
-file_path = r"data\news n mentions + sentiment.csv"
-df = pd.read_csv(file_path)
-
-# Step 2: Clean column names
-df.columns = df.columns.str.strip()
-
-# Step 3: Verify required columns
-if not {'Brand', 'Sentiment'}.issubset(df.columns):
-    raise ValueError(f"Missing required columns. Found: {df.columns.tolist()}")
-
-# Step 4: Get unique brands
-brands = df['Brand'].unique()
-
-# Step 5: Set colors
-sentiment_colors = {
-    'Positive': '#4CAF50',
-    'Neutral': '#FF9800',
-    'Negative': '#F44336'
-}
-
-# Step 6: Plot one pie chart per brand
-for brand in brands:
-    brand_df = df[df['Brand'] == brand]
-    sentiment_counts = brand_df['Sentiment'].value_counts()
-
-    # Plot pie chart
+def generate_sentiment_pie_chart(brand=None):
+    file_path = r"data\news n mentions + sentiment.csv"
+    df = pd.read_csv(file_path)
+    df.columns = df.columns.str.strip()
+    if not {'Brand', 'Sentiment'}.issubset(df.columns):
+        raise ValueError(f"Missing required columns. Found: {df.columns.tolist()}")
+    sentiment_colors = {
+        'Positive': '#4CAF50',
+        'Neutral': '#FF9800',
+        'Negative': '#F44336'
+    }
+    if brand is None:
+        # If no brand specified, aggregate all
+        sentiment_counts = df['Sentiment'].value_counts()
+        title = "Sentiment Breakdown - All Brands"
+    else:
+        brand_df = df[df['Brand'] == brand]
+        sentiment_counts = brand_df['Sentiment'].value_counts()
+        title = f"Sentiment Breakdown - {brand}"
     plt.figure(figsize=(6, 5))
     sentiment_counts.plot(
         kind='pie',
@@ -36,8 +28,11 @@ for brand in brands:
         autopct='%1.1f%%',
         startangle=140
     )
-
-    plt.title(f'Sentiment Breakdown - {brand}')
+    plt.title(title)
     plt.ylabel('')
     plt.tight_layout()
-    plt.show()
+    buf = BytesIO()
+    plt.savefig(buf, format="png", dpi=300)
+    plt.close()
+    buf.seek(0)
+    return buf

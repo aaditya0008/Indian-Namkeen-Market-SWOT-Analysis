@@ -6,14 +6,14 @@ from io import BytesIO
 df = pd.read_csv("data/Competitor Pricing Strategy Agg.csv")
 
 # Check column names
-print("Columns in dataset:", df.columns)
+# print("Columns in dataset:", df.columns)  # <-- Commented out
 
 # Clean data: Remove rows with missing values in 'Aggressiveness' column
 df_clean = df[df['Aggressiveness'].notna()]
 
 # Show the table with brand and aggressiveness score
 brand_aggressiveness_table = df_clean[['Brand', 'Aggressiveness']]
-print("\nBrand and Aggressiveness Score Table:\n", brand_aggressiveness_table)
+# print("\nBrand and Aggressiveness Score Table:\n", brand_aggressiveness_table)  # <-- Commented out
 
 # Map the aggressiveness levels to a categorical variable for consistency in the chart
 df_clean['Aggressiveness Level'] = df_clean['Aggressiveness'].map({

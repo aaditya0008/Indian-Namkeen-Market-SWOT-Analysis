@@ -11,14 +11,14 @@ df.columns = [col.strip() for col in df.columns]
 df.dropna(subset=["Competitor", "Partnership Type", "Partner(s)"], inplace=True)
 
 # Display in readable format
-print("\nCompetitor Partnership Network Mapping:\n")
-for _, row in df.iterrows():
-    competitor = row['Competitor']
-    p_type = row['Partnership Type']
-    partner = row['Partner(s)']
-    details = row['Details']
-    
-    print(f"{competitor} - [{p_type}] with '{partner}': {details}")
+#print("\nCompetitor Partnership Network Mapping:\n")
+#for _, row in df.iterrows():
+#    competitor = row['Competitor']
+#    p_type = row['Partnership Type']
+#    partner = row['Partner(s)']
+#    details = row['Details']
+#    
+#    print(f"{competitor} - [{p_type}] with '{partner}': {details}")
 
 # (Optional) Save cleaned output
 #output_path = "data/Competitor_Partnership_Network_Clean.csv"
