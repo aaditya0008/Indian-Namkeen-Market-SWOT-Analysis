@@ -1,4 +1,3 @@
-
 # section E : Swot analysis
 from fastapi import FastAPI
 from typing import Dict, Any
@@ -994,7 +993,7 @@ from section_Fcode import (
 # ✅ Enable CORS for Swagger & frontend access
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Change "*" to specific origins in production
+    allow_origins=["*"],  # Allows all origins
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -1061,7 +1060,7 @@ async def get_kpi2_data(
     return result
 
 @app.get("/kpi2/plot")
-async def get_kpi2_plot(
+async def get_kpi_5_plot(
     file_path: str = Query(
         default="Market_data/KPI-2.csv", 
         include_in_schema=False
@@ -1129,28 +1128,23 @@ async def run_kpi_7(request: Request):
 # ...existing code...
 from fastapi import Request, Query, HTTPException
 from fastapi.responses import StreamingResponse
+import base64
 
 @app.get("/A-kpi/8")
-async def run_kpi_8():
-    params = {"file_path": r"Market_data/KPI-8.csv"}
+async def run_kpi_8(request: Request):
+    params = dict(request.query_params)
+    return k8.run_kpi(params)
+@app.get("/A-kpi/8/plot", response_class=StreamingResponse)
+async def get_kpi_8_plot(request: Request):
+    params = dict(request.query_params)
     result = k8.run_kpi(params)
-    return result
 
-@app.get("/A-kpi/8/plot")
-async def get_kpi_8_plot(
-    file_path: str = Query(
-        default=r"Market_data/KPI-8.csv",
-        include_in_schema=False
-    )
-):
-    try:
-        buf = k8.get_plot_image(file_path)
-        return StreamingResponse(buf, media_type="image/png")
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="CSV file not found.")
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Error generating plot: {str(e)}")
-
+    if "chart_base64" in result and result["chart_base64"]:
+        image_data = base64.b64decode(result["chart_base64"])
+        return StreamingResponse(io.BytesIO(image_data), media_type="image/png")
+    else:
+        return JSONResponse(content={"error": "Chart not available"}, status_code=500)
+    
 @app.get("/A-kpi/9")
 async def run_kpi_9(request: Request):
     params = dict(request.query_params)
@@ -1240,6 +1234,22 @@ async def run_kpi_15(request: Request):
     params = dict(request.query_params)
     return k15.run_kpi(params)
 
+from fastapi import Query
+
+@app.get("/A-kpi/15/plot")
+async def run_kpi_15_plot(
+    file_path: str = Query(default="market_data/KPI-15.csv", include_in_schema=False)
+):
+    try:
+        result = k15.run_kpi({"file_path": file_path})
+        if "chart_buffer" in result:
+            return StreamingResponse(result["chart_buffer"], media_type="image/png")
+        raise HTTPException(status_code=400, detail="Plot not generated.")
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="CSV file not found.")
+    except Exception as e:
+        print("KPI-15 Plot Error:", e)
+        raise HTTPException(status_code=400, detail=f"Error generating plot: {str(e)}")
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

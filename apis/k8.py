@@ -1,5 +1,4 @@
 import pandas as pd
-import seaborn as sns
 import matplotlib.pyplot as plt
 import io
 import base64
@@ -31,36 +30,36 @@ def load_and_process_data(file_path):
         return None
 
 
-def generate_heatmap_chart_base64(df):
+def generate_bar_chart_base64(df):
     try:
-        summary = df.groupby("Platform")["Qualitative_Rating"].value_counts().unstack(fill_value=0)
+        grouped = df.groupby(["Platform", "Qualitative_Rating"]).size().unstack(fill_value=0)
 
-        plt.figure(figsize=(8, 5))
-        sns.heatmap(summary, annot=True, cmap="YlGnBu", fmt="d", linewidths=.5, cbar=False)
-
-        plt.title("📊 Platform-wise Product Availability Ratings")
-        plt.xlabel("Rating")
+        # Plotting
+        grouped.plot(kind='barh', stacked=True, figsize=(10, 6), color=["#2ecc71", "#f1c40f", "#e74c3c"])
+        plt.title("Platform-wise Product Availability (Qualitative Rating)")
+        plt.xlabel("Number of Products")
         plt.ylabel("Platform")
+        plt.legend(title="Rating")
         plt.tight_layout()
 
+        # Save to buffer
         buf = io.BytesIO()
         plt.savefig(buf, format="png")
         plt.close()
         buf.seek(0)
-
         return base64.b64encode(buf.read()).decode("utf-8")
 
     except Exception as e:
-        print(f"Error generating heatmap: {e}")
+        print(f"Error generating bar chart: {e}")
         return None
 
 
 def run_kpi(params):
-    file_path = params.get("file_path", "Market_data/KPI-8.csv")
+    file_path = params.get("file_path", "market_data/KPI-8.csv")
     df = load_and_process_data(file_path)
 
     if df is not None and not df.empty:
-       
+        chart_base64 = generate_bar_chart_base64(df)
         high_count = df[df["Qualitative_Rating"] == "High"].shape[0]
         medium_count = df[df["Qualitative_Rating"] == "Medium"].shape[0]
         low_count = df[df["Qualitative_Rating"] == "Low"].shape[0]
@@ -73,33 +72,10 @@ def run_kpi(params):
                 "Medium": medium_count,
                 "Low": low_count
             },
-            
+            "chart_base64": chart_base64
         }
     else:
         return {
             "kpi_name": "Platform-wise Availability Ratings",
             "error": "Failed to load or process data"
         }
-
-
-def get_plot_image(file_path):
-    """
-    Returns a PNG image buffer of the platform-wise product availability heatmap.
-    """
-    df = load_and_process_data(file_path)
-    if df is None or df.empty:
-        raise FileNotFoundError("Failed to load or process data")
-    summary = df.groupby("Platform")["Qualitative_Rating"].value_counts().unstack(fill_value=0)
-
-    plt.figure(figsize=(8, 5))
-    sns.heatmap(summary, annot=True, cmap="YlGnBu", fmt="d", linewidths=.5, cbar=False)
-    plt.title("📊 Platform-wise Product Availability Ratings")
-    plt.xlabel("Rating")
-    plt.ylabel("Platform")
-    plt.tight_layout()
-
-    buf = io.BytesIO()
-    plt.savefig(buf, format="png")
-    plt.close()
-    buf.seek(0)
-    return buf
